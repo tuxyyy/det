@@ -1,0 +1,131 @@
+%% -*- coding: utf-8 -*-
+\documentclass[12pt,a4paper]{scrartcl} 
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\begin{document}
+\section{Введение}
+\label{sec:intro}
+
+Определителем квадратной матрицы
+$ A_{m,n} = 
+ \begin{pmatrix}
+  a_{11} & a_{12} \\
+  a_{21} & a_{22} \\
+ \end{pmatrix}
+$ второго порядка называется число 
+$|A|= {a_{11} a_{22}-a_{12} a_{21}}$.
+Определителем 
+$ A = 
+ \begin{pmatrix}
+  a_{11} & \cdots & a_{1n} \\
+  \vdots  & \ddots & \vdots  \\
+  a_{n1}  & \cdots & a_{nn} 
+ \end{pmatrix}
+$ квадратной матрицы порядка $n, n\geq3$, называется число $|A|=\displaystyle \sum_{k=1}^n(-1)^{k+1}a_{1k}M_k$, где $M_k$ - определитель матрицы порядка $n-1$, полученной из матрицы A вычеркиванием первой строки и столбца с номером k.
+
+Пример приведен в пункте ~\ref{sec:exp} на стр.~\pageref{sec:example}.
+
+\section{Ход работы}
+\label{sec:exp}
+
+\subsection{Код приложения}
+\label{sec:exp:code}
+\begin{verbatim}
+#include <iostream>
+#include <vector>
+
+
+using namespace std;
+
+
+// Функция для вывода матрицы
+void printMatrix(vector<vector<double>> matrix) 
+{
+    for (int i = 0; i < matrix.size(); i++) 
+    {
+        for (int j = 0; j < matrix[i].size(); j++)
+        {
+            cout << matrix[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
+
+// Функция для нахождения определителя матрицы
+double determinant(vector<vector<double>> matrix) 
+{
+    double det = 1;
+    int n = matrix.size();
+
+    // Приводим матрицу к треугольному виду
+    for (int i = 0; i < n; i++) 
+    {
+        for (int j = i + 1; j < n; j++) 
+        {
+            double factor = matrix[j][i] / matrix[i][i];
+            for (int k = i; k < n; k++) 
+            {
+                matrix[j][k] -= factor * matrix[i][k];
+            }
+        }
+    }
+
+    // Вычисляем определитель как произведение элементов на главной диагонали
+    for (int i = 0; i < n; i++) 
+    {
+        det *= matrix[i][i];
+    }
+
+    return det;
+}
+
+
+int main() 
+{
+    setlocale(LC_ALL, "Russian");
+    // Вводим размерность матрицы
+    int n;
+    cout << "Введите размер матрицы: ";
+    cin >> n;
+
+
+    // Создаем матрицу
+    vector<vector<double>> matrix(n, vector<double>(n));
+    cout << "Введите элементы матрицы:" << endl;
+    for (int i = 0; i < n; i++) 
+    {
+        for (int j = 0; j < n; j++) 
+        {
+            cin >> matrix[i][j];
+        }
+    }
+
+    // Выводим матрицу
+    cout << "Матрица:" << endl;
+    printMatrix(matrix);
+
+    // Вычисляем определитель
+    double det = determinant(matrix);
+
+    // Выводим определитель
+    cout << "Определитель равен: " << det << endl;
+
+    return 0;
+}
+\end{verbatim}
+
+\subsection{Пример работы}
+\label{sec:example}
+Пример работы представлен на рис.~\ref{fig:wex}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\textwidth]{example.jpg}
+	\caption{Пример работы}\label{fig:wex}
+\end{figure}
+
+\end{document}
