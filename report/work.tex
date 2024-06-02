@@ -1,0 +1,69 @@
+%% -*- coding: utf-8 -*-
+\documentclass[12pt,a4paper]{scrartcl} 
+\usepackage[utf8]{inputenc}
+\usepackage[english,russian]{babel}
+\usepackage{indentfirst}
+\usepackage{misccorr}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\begin{document}
+\section{Введение}
+\label{sec:intro}
+
+Создать программу для генерации случайных паролей заданной длины и сложности
+
+\section{Ход работы}
+\label{sec:exp}
+
+\subsection{Код приложения}
+\label{sec:exp:code}
+\begin{verbatim}
+#include <iostream>
+#include <string>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+string generatePassword(int length) {
+    string password;
+    static const char alphanum[] = // Массив из набора символов
+        "0123456789"
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        "abcdefghijklmnopqrstuvwxyz"
+        "!@#$%^&*";
+    int stringLength = sizeof(alphanum) - 1;
+
+    for (int i = 0; i < length; ++i) {
+        password += alphanum[rand() % stringLength];
+    }
+
+    return password;
+}
+
+int main() {
+    setlocale(LC_ALL, "Russian"); // Русский язык
+    srand(time(0)); // Инициализация генератора случайных чисел
+
+    int passwordLength;
+    cout << "Введите длину пароля: ";
+    cin >> passwordLength;
+
+    string password = generatePassword(passwordLength);
+    cout << "Сгенерированный пароль: " << password << endl;
+
+    return 0;
+}
+\end{verbatim}
+
+\subsection{Пример работы}
+\label{sec:example}
+Пример работы представлен на рис.~\ref{fig:enter-label}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=1\textwidth]{example.png}
+    \caption{Пример работы}\label{fig:enter-label}
+\end{figure}
+
+\end{document}
+
